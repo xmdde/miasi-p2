@@ -9,9 +9,10 @@
 [file('GameBoard.py', false, 'UTF-8')]
 [comment @main/]
 
+[comment -- 0. Generowanie klasy bazowej Piece --/]
 [generatePiece(board)/]
 
-[comment -- 1. Generowanie klas (Pawn, Rook, itd.) --/]
+[comment -- 1. Generowanie klas figur (Pawn, Rook, itd.) --/]
 [for (c : Class |
     board.packagedElement
         ->filter(InstanceSpecification)
@@ -44,15 +45,11 @@
 [template private generateClass(c : Class)]
 class [c.name/](Piece):
     def symbol(self):
-[if (c.name = 'Pawn')]
-        return 'P' if self.color == 'White' else 'p'
-[/if]
-[if (c.name = 'Rook')]
-        return 'R' if self.color == 'White' else 'r'
+[if (c.name = 'Knight')]
+        return 'N' if self.color == 'White' else 'n'
 [else]
-        # to implement
+        return '[c.name.first(1)/]' if self.color == 'White' else '[c.name.first(1).toLowerCase()/]'
 [/if]
-
 [/template]
 
 [template private generatePiece(board : Model)]
@@ -85,7 +82,6 @@ class GameBoard(Board):
   )]
 		self.add_piece([p.classifier->asSequence()->first().name/]("[p.slot->select(s | s.definingFeature.name = 'color')->asSequence()->first().value->first().oclAsType(LiteralString).value/]", [p.slot->select(s | s.definingFeature.name = 'row')->asSequence()->first().value->first().oclAsType(LiteralInteger).value/], '[p.slot->select(s | s.definingFeature.name = 'col')->asSequence()->first().value->first().oclAsType(LiteralString).value/]'))
 [/for]
-
 [/template]
 
 [template private generateBaseBoard(board : Model)]
