@@ -1,0 +1,103 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module generate.
+ */]
+[module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[template public generatePython(board : Model)]
+[file('GameBoard.py', false, 'UTF-8')]
+[comment @main/]
+
+[generatePiece(board)/]
+
+[comment -- 1. Generowanie klas (Pawn, Rook, itd.) --/]
+[for (c : Class |
+    board.packagedElement
+        ->filter(InstanceSpecification)
+        ->select(i | 
+            i.classifier->notEmpty() and
+            i.classifier->asSequence()->first().oclIsKindOf(Class) and (
+                i.classifier->asSequence()->first().name = 'Piece' or 
+                i.classifier->asSequence()->first().name = 'King' or 
+                i.classifier->asSequence()->first().name = 'Pawn' or 
+                i.classifier->asSequence()->first().name = 'Queen' or 
+                i.classifier->asSequence()->first().name = 'Rook' or 
+                i.classifier->asSequence()->first().name = 'Bishop' or 
+                i.classifier->asSequence()->first().name = 'Knight'
+            )
+        )
+        ->collect(i | i.classifier->asSequence()->first().oclAsType(Class))
+        ->asSet()
+)]
+[generateClass(c)/]
+[/for]
+
+[comment -- 2. Generowanie Board i GameBoard --/]
+[generateBaseBoard(board)/]
+
+[generateGameBoardSetup(board)/]
+
+[/file]
+[/template]
+
+[template private generateClass(c : Class)]
+class [c.name/](Piece):
+    def symbol(self):
+[if (c.name = 'Pawn')]
+        return 'P' if self.color == 'White' else 'p'
+[/if]
+[if (c.name = 'Rook')]
+        return 'R' if self.color == 'White' else 'r'
+[else]
+        # to implement
+[/if]
+
+[/template]
+
+[template private generatePiece(board : Model)]
+class Piece:
+    def __init__(self, color, col, row):
+        self.color = color
+        self.col = col  # e.g. 'e'
+        self.row = row  # e.g. 2
+
+    def symbol(self):
+        raise NotImplementedError("Subclasses must implement this method.")
+
+    def position_indices(self):
+        x = ord(self.col.lower()) - ord('a')
+        y = self.row - 1
+        return x, y
+
+[/template]
+
+[template private generateGameBoardSetup(board : Model)]
+class GameBoard(Board):
+    def __init__(self):
+        super().__init__(8)
+        self.move_history = [ '[' /][ ']' /]
+        self.setup()
+
+    def setup(self):
+[for (p : InstanceSpecification | board.packagedElement->filter(InstanceSpecification)->select(i | 
+    i.classifier->exists(c | i.classifier->asSequence()->first().name = 'Piece' or i.classifier->asSequence()->first().name = 'King' or i.classifier->asSequence()->first().name = 'Pawn' or c.name = 'Queen' or c.name = 'Rook' or c.name = 'Bishop' or c.name = 'Knight'))
+  )]
+		self.add_piece([p.classifier->asSequence()->first().name/]("[p.slot->select(s | s.definingFeature.name = 'color')->asSequence()->first().value->first().oclAsType(LiteralString).value/]", [p.slot->select(s | s.definingFeature.name = 'row')->asSequence()->first().value->first().oclAsType(LiteralInteger).value/], '[p.slot->select(s | s.definingFeature.name = 'col')->asSequence()->first().value->first().oclAsType(LiteralString).value/]'))
+[/for]
+
+[/template]
+
+[template private generateBaseBoard(board : Model)]
+class Board:
+    def __init__(self, size):
+        self.size = size
+        self.pieces = ['['/][']'/]
+
+    def add_piece(self, piece):
+        self.pieces.append(piece)
+
+    def setup_board(self):
+        self.add_pieces()
+[/template]
+

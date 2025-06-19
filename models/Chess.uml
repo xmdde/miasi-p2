@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001"
+    xmlns:xmi="http://www.omg.org/spec/XMI/20131001"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML"
+    xmi:id="_instanceModel1"
+    name="instance_diagram_minimal"
+    visibility="public">
+
+  <packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_board1" name="Board1" visibility="public">
+    <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_PYDcQEUvEfCXd9ctvCTcZw"/>
+    <slot>
+      <definingFeature xmi:type="uml:Property" href="#_qNtTkEZBEfC34IrWwVNdgg"/>
+      <value xmi:type="uml:LiteralInteger" value="8"/>
+    </slot>
+  </packagedElement>
+
+  <packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_pos1" name="Pos1" visibility="public">
+    <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_j89eIEh5EfCvF8TujsuLIw"/>
+    <slot>
+      <definingFeature xmi:type="uml:Property" href="#_N_pkMEh3EfCvF8TujsuLIw"/>
+      <value xmi:type="uml:LiteralInteger" value="1"/>
+    </slot>
+    <slot>
+      <definingFeature xmi:type="uml:Property" href="#_SjuMUEh3EfCvF8TujsuLIw"/>
+      <value xmi:type="uml:LiteralInteger" value="5"/>
+    </slot>
+  </packagedElement>
+
+  <packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_king1" name="WhiteKing" visibility="public">
+  <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_Tnn-4EY-EfC34IrWwVNdgg"/>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#__WHBoEU5EfC387Za0EBymg"/>
+    <value xmi:type="uml:LiteralString" value="White"/>
+  </slot>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_dQkQ8EU_EfC387Za0EBymg"/>
+    <value xmi:type="uml:InstanceValue" instance="ChessMetamodel.uml#_vfk0gEU-EfC387Za0EBymg"/>
+  </slot>
+  <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_rowId"/>
+    <value xmi:type="uml:LiteralInteger" value="1"/>
+  </slot>
+  <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_colId"/>
+    <value xmi:type="uml:LiteralString" value="e"/>
+  </slot>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_newPositionId"/>
+    <value xmi:type="uml:InstanceValue" instance="_pos1"/>
+  </slot>
+</packagedElement>
+
+</uml:Model>
+
