@@ -27,7 +27,7 @@
     </slot>
   </packagedElement>
 
-<packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_king1" name="WhiteKing" visibility="public">
+  <packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_king1" name="WhiteKing" visibility="public">
   <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_Tnn-4EY-EfC34IrWwVNdgg"/>
   <slot>
     <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#__WHBoEU5EfC387Za0EBymg"/>
@@ -71,7 +71,51 @@
   </slot>
 </packagedElement>
 
-<packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_pawn1" name="BlackPawn1" visibility="public">
+<packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_queen1" name="WhiteQueen" visibility="public">
+  <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_XbMXIEY-EfC34IrWwVNdgg"/>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#__WHBoEU5EfC387Za0EBymg"/>
+    <value xmi:type="uml:LiteralString" value="White"/>
+  </slot>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_dQkQ8EU_EfC387Za0EBymg"/>
+    <value xmi:type="uml:InstanceValue" instance="ChessMetamodel.uml#_xNkAUEU-EfC387Za0EBymg"/>
+  </slot>
+  <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_rowId"/>
+    <value xmi:type="uml:LiteralInteger" value="1"/>
+  </slot>
+  <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_colId"/>
+    <value xmi:type="uml:LiteralString" value="d"/>
+  </slot>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_newPositionId"/>
+    <value xmi:type="uml:InstanceValue" instance="_pos1"/>
+  </slot>
+</packagedElement>
+
+<packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_queen2" name="BlackQueen" visibility="public">
+  <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_XbMXIEY-EfC34IrWwVNdgg"/>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#__WHBoEU5EfC387Za0EBymg"/>
+    <value xmi:type="uml:LiteralString" value="Black"/>
+  </slot>
+  <slot>
+    <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_dQkQ8EU_EfC387Za0EBymg"/>
+    <value xmi:type="uml:InstanceValue" instance="ChessMetamodel.uml#_xNkAUEU-EfC387Za0EBymg"/>
+  </slot>
+  <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_colId"/>
+    <value xmi:type="uml:LiteralString" value="d"/>
+  </slot>
+    <slot>
+  	<definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#_rowId"/>
+    <value xmi:type="uml:LiteralInteger" value="8"/>
+  </slot>
+</packagedElement>
+
+ <packagedElement xmi:type="uml:InstanceSpecification" xmi:id="_pawn1" name="BlackPawn1" visibility="public">
   <classifier xmi:type="uml:Class" href="ChessMetamodel.uml#_aTk5gEY-EfC34IrWwVNdgg"/>
   <slot>
     <definingFeature xmi:type="uml:Property" href="ChessMetamodel.uml#__WHBoEU5EfC387Za0EBymg"/>
@@ -92,4 +136,3 @@
 </packagedElement>
 
 </uml:Model>
-
