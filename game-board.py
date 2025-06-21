@@ -2,8 +2,8 @@
 class Piece:
     def __init__(self, color, col, row):
         self.color = color
-        self.col = col  # e.g. 'e'
-        self.row = row  # e.g. 2
+        self.col = col
+        self.row = row
 
     def symbol(self):
         raise NotImplementedError("Subclasses must implement this method.")
@@ -14,10 +14,6 @@ class Piece:
         return x, y
 
 
-class King(Piece):
-    def symbol(self):
-        return 'K' if self.color == 'White' else 'k'
-
 class Pawn(Piece):
     def symbol(self):
         return 'P' if self.color == 'White' else 'p'
@@ -25,6 +21,10 @@ class Pawn(Piece):
 class Queen(Piece):
     def symbol(self):
         return 'Q' if self.color == 'White' else 'q'
+
+class King(Piece):
+    def symbol(self):
+        return 'K' if self.color == 'White' else 'k'
 
 
 class Board:
@@ -56,7 +56,6 @@ class Board:
         print(divider)
         print(top_row)
 
-
 class GameBoard(Board):
     def __init__(self):
         super().__init__(8)
@@ -64,13 +63,18 @@ class GameBoard(Board):
         self.setup()
 
     def setup(self):
-        self.add_piece(Queen("White", 'd', 1))
-        self.add_piece(King("Black", 'e', 8))
         self.add_piece(Queen("Black", 'd', 8))
-        self.add_piece(Pawn("Black", 'a', 7))
         self.add_piece(King("White", 'e', 1))
-
-
+        self.add_piece(King("Black", 'e', 8))
+        self.add_piece(Pawn("Black", 'c', 7))
+        self.add_piece(Pawn("White", 'c', 2))
+        self.add_piece(Pawn("Black", 'e', 7))
+        self.add_piece(Pawn("Black", 'a', 7))
+        self.add_piece(Pawn("Black", 'b', 7))
+        self.add_piece(Queen("White", 'd', 1))
+        self.add_piece(Pawn("Black", 'd', 7))
+        self.add_piece(Pawn("White", 'a', 2))
+        self.add_piece(Pawn("White", 'b', 2))
 
 if __name__ == "__main__":
     board = GameBoard()
