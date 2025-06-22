@@ -1,0 +1,182 @@
+[comment encoding = UTF-8 /]
+[module generateHTML('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[template public generateHTML(board : Model)]
+	
+[comment @main /]
+[file ('ChessBoard.html', false, 'UTF-8')]
+
+[generateBody(board)/]
+
+<script>
+  const size = [board.packagedElement->filter(InstanceSpecification)->select(i | i.classifier->exists(c | i.classifier->asSequence()->first().name = 'Board')).slot->select(s | s.definingFeature.name = 'size')->asSequence()->first().value->first().eGet('value')/];
+
+  const symbols = {
+  [for (c : Class |
+    board.packagedElement
+        ->filter(InstanceSpecification)
+        ->select(i | 
+            i.classifier->notEmpty() and
+            i.classifier->asSequence()->first().oclIsKindOf(Class) and (
+                i.classifier->asSequence()->first().name = 'Piece' or 
+                i.classifier->asSequence()->first().name = 'King' or 
+                i.classifier->asSequence()->first().name = 'Pawn' or 
+                i.classifier->asSequence()->first().name = 'Queen' or 
+                i.classifier->asSequence()->first().name = 'Rook' or 
+                i.classifier->asSequence()->first().name = 'Bishop' or 
+                i.classifier->asSequence()->first().name = 'Knight'
+            )
+        )
+        ->collect(i | i.classifier->asSequence()->first().oclAsType(Class))
+        ->asSet()
+  )]
+    [generateClass(c)/]
+  [/for]
+  };
+
+  [setupBoard(board)/]
+  [renderBoardFn(board)/]
+</script>
+
+</body>
+</html>
+[/file]
+[/template]
+
+[template private generateBody(board : Model)]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Szachownica</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    td {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 38px;
+      font-family: monospace;
+      border: 1px solid #333;
+      user-select: none;
+    }
+    .white { background-color: #f0d9b5; }
+    .black { background-color: #b58863; }
+    .white-piece { color: white; }
+    .black-piece { color: black; }
+    .label {
+      background: none;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+      color: black;
+    }
+    .label-row td, .label-col {
+      border: none;
+      background: none;
+    }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Chess Board</h2>
+<div style="display: flex; justify-content: center;">
+  <table id="chessboard"></table>
+</div>
+[/template]
+
+[template private generateClass(c : Class)]
+"[c.name/]" : "[if (c.name = 'Pawn')]♟[elseif (c.name = 'Knight')]♞[elseif (c.name = 'Bishop')]♝[elseif (c.name = 'Rook')]♜[elseif (c.name = 'Queen')]♛[elseif (c.name = 'King')]♚[/if]",
+[/template]
+
+[template private setupBoard(board : Model)]
+const pieces = ['['/]
+[for (p : InstanceSpecification | board.packagedElement->filter(InstanceSpecification)->select(i | 
+    i.classifier->exists(c | i.classifier->asSequence()->first().name = 'Piece' or i.classifier->asSequence()->first().name = 'King' or i.classifier->asSequence()->first().name = 'Pawn' or c.name = 'Queen' or c.name = 'Rook' or c.name = 'Bishop' or c.name = 'Knight'))
+  )]
+  {type: "[p.classifier->asSequence()->first().name/]", color: "[p.slot->select(s | s.definingFeature.name = 'color')->asSequence()->first().value->first().oclAsType(LiteralString).value/]", col: "[p.slot->select(s | s.definingFeature.name = 'col')->asSequence()->first().value->first().oclAsType(LiteralString).value/]", row: [p.slot->select(s | s.definingFeature.name = 'row')->asSequence()->first().value->first().oclAsType(LiteralInteger).value/]},
+[/for]
+];
+[/template]
+
+[template private renderBoardFn(board : Model)]
+function renderBoard(pieces) {
+    const board = document.getElementById("chessboard");
+    board.innerHTML = "";
+
+    const grid = Array.from({ length: size }, () => Array(size).fill(null));
+    const cols = Array.from({ length: size }, (_, i) => String.fromCharCode(97 + i));
+
+    pieces.forEach(piece => {
+      const x = piece.col.charCodeAt(0) - "a".charCodeAt(0);
+      const y = size - piece.row;
+      if (x >= 0 && x < size && y >= 0 && y < size) {
+        grid['['/]y]['['/]x] = piece;
+      }
+    });
+
+    const topRow = document.createElement("tr");
+    const emptyTopLeft = document.createElement("td");
+    emptyTopLeft.className = "label-col";
+    topRow.appendChild(emptyTopLeft);
+
+    for (let c = 0; c < size; c++) {
+      const td = document.createElement("td");
+      td.className = "label";
+      td.textContent = cols['['/]c];
+      topRow.appendChild(td);
+    }
+
+    board.appendChild(topRow);
+
+    for (let row = 0; row < size; row++) {
+      const tr = document.createElement("tr");
+
+      const leftLabel = document.createElement("td");
+      leftLabel.className = "label";
+      leftLabel.textContent = size - row;
+      tr.appendChild(leftLabel);
+
+      for (let col = 0; col < size; col++) {
+        const td = document.createElement("td");
+        const isWhite = (row + col) % 2 === 0;
+        td.className = isWhite ? "white" : "black";
+
+        const piece = grid['['/]row]['['/]col];
+        if (piece) {
+          td.textContent = symbols['['/]piece.type];
+          td.classList.add(piece.color === "White" ? "white-piece" : "black-piece");
+        }
+
+        tr.appendChild(td);
+      }
+
+      const rightLabel = document.createElement("td");
+      rightLabel.className = "label";
+      rightLabel.textContent = size - row;
+      tr.appendChild(rightLabel);
+
+      board.appendChild(tr);
+    }
+
+    const bottomRow = document.createElement("tr");
+    const emptyBottomLeft = document.createElement("td");
+    emptyBottomLeft.className = "label-col";
+    bottomRow.appendChild(emptyBottomLeft);
+
+    for (let c = 0; c < size; c++) {
+      const td = document.createElement("td");
+      td.className = "label";
+      td.textContent = cols['['/]c];
+      bottomRow.appendChild(td);
+    }
+    board.appendChild(bottomRow);
+  }
+
+  renderBoard(pieces);
+[/template]

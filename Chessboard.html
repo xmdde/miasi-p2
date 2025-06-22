@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Chessboard</title>
+  <meta charset="UTF-8" />
+  <title>Szachownica</title>
   <style>
     table {
       border-collapse: collapse;
@@ -16,11 +17,24 @@
       font-size: 38px;
       font-family: monospace;
       border: 1px solid #333;
+      user-select: none;
     }
     .white { background-color: #f0d9b5; }
     .black { background-color: #b58863; }
     .white-piece { color: white; }
     .black-piece { color: black; }
+    .label {
+      background: none;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+      color: black;
+    }
+    .label-row td, .label-col {
+      border: none;
+      background: none;
+    }
   </style>
 </head>
 <body>
@@ -31,83 +45,125 @@
 </div>
 
 <script>
+  const size = 8;
+
   const symbols = {
-    "Pawn": "♟",
-    "Rook": "♜",
-    "Knight": "♞",
-    "Bishop": "♝",
-    "Queen": "♛",
-    "King": "♚"
+    "Rook" : "♜",
+    "Bishop" : "♝",
+    "King" : "♚",
+    "Pawn" : "♟",
+    "Knight" : "♞",
+    "Queen" : "♛",
   };
 
   const pieces = [
-    { color: "Black", type: "Rook", col: "a", row: 8 },
-    { color: "Black", type: "Knight", col: "b", row: 8 },
-    { color: "Black", type: "Bishop", col: "c", row: 8 },
-    { color: "Black", type: "Queen", col: "d", row: 8 },
-    { color: "Black", type: "King", col: "e", row: 8 },
-    { color: "Black", type: "Bishop", col: "f", row: 8 },
-    { color: "Black", type: "Knight", col: "g", row: 8 },
-    { color: "Black", type: "Rook", col: "h", row: 8 },
-    { color: "Black", type: "Pawn", col: "a", row: 7 },
-    { color: "Black", type: "Pawn", col: "b", row: 7 },
-    { color: "Black", type: "Pawn", col: "c", row: 7 },
-    { color: "Black", type: "Pawn", col: "d", row: 7 },
-    { color: "Black", type: "Pawn", col: "e", row: 7 },
-    { color: "Black", type: "Pawn", col: "f", row: 7 },
-    { color: "Black", type: "Pawn", col: "g", row: 7 },
-    { color: "Black", type: "Pawn", col: "h", row: 7 },
-
-    { color: "White", type: "Pawn", col: "a", row: 2 },
-    { color: "White", type: "Pawn", col: "b", row: 2 },
-    { color: "White", type: "Pawn", col: "c", row: 2 },
-    { color: "White", type: "Pawn", col: "d", row: 2 },
-    { color: "White", type: "Pawn", col: "e", row: 2 },
-    { color: "White", type: "Pawn", col: "f", row: 2 },
-    { color: "White", type: "Pawn", col: "g", row: 2 },
-    { color: "White", type: "Pawn", col: "h", row: 2 },
-    { color: "White", type: "Rook", col: "a", row: 1 },
-    { color: "White", type: "Knight", col: "b", row: 1 },
-    { color: "White", type: "Bishop", col: "c", row: 1 },
-    { color: "White", type: "Queen", col: "d", row: 1 },
-    { color: "White", type: "King", col: "e", row: 1 },
-    { color: "White", type: "Bishop", col: "f", row: 1 },
-    { color: "White", type: "Knight", col: "g", row: 1 },
-    { color: "White", type: "Rook", col: "h", row: 1 }
+    {type: "Knight", color: "White", col: "b", row: 1},
+    {type: "Pawn", color: "White", col: "f", row: 2},
+    {type: "Queen", color: "White", col: "d", row: 1},
+    {type: "Bishop", color: "Black", col: "c", row: 8},
+    {type: "Pawn", color: "White", col: "d", row: 2},
+    {type: "Pawn", color: "White", col: "b", row: 2},
+    {type: "Knight", color: "Black", col: "g", row: 8},
+    {type: "Pawn", color: "Black", col: "g", row: 7},
+    {type: "Pawn", color: "White", col: "c", row: 2},
+    {type: "Pawn", color: "White", col: "a", row: 2},
+    {type: "Pawn", color: "White", col: "g", row: 2},
+    {type: "Rook", color: "White", col: "a", row: 1},
+    {type: "Rook", color: "Black", col: "a", row: 8},
+    {type: "King", color: "White", col: "e", row: 1},
+    {type: "Bishop", color: "White", col: "c", row: 1},
+    {type: "Pawn", color: "Black", col: "b", row: 7},
+    {type: "Pawn", color: "Black", col: "f", row: 7},
+    {type: "Pawn", color: "Black", col: "h", row: 7},
+    {type: "Bishop", color: "White", col: "f", row: 1},
+    {type: "Pawn", color: "Black", col: "e", row: 7},
+    {type: "Pawn", color: "Black", col: "c", row: 7},
+    {type: "Knight", color: "White", col: "g", row: 1},
+    {type: "Pawn", color: "Black", col: "a", row: 7},
+    {type: "Pawn", color: "White", col: "h", row: 2},
+    {type: "Pawn", color: "Black", col: "d", row: 7},
+    {type: "Queen", color: "Black", col: "d", row: 8},
+    {type: "Bishop", color: "Black", col: "f", row: 8},
+    {type: "Rook", color: "Black", col: "h", row: 8},
+    {type: "King", color: "Black", col: "e", row: 8},
+    {type: "Rook", color: "White", col: "h", row: 1},
+    {type: "Knight", color: "Black", col: "b", row: 8},
+    {type: "Pawn", color: "White", col: "e", row: 2},
   ];
-
   function renderBoard(pieces) {
-    const board = document.getElementById("chessboard");
-    board.innerHTML = "";
-
-    const grid = Array.from({ length: 8 }, () => Array(8).fill(null));
-
-    pieces.forEach(piece => {
-      const x = piece.col.charCodeAt(0) - "a".charCodeAt(0);
-      const y = 8 - piece.row;
-      grid[y][x] = piece;
-    });
-
-    for (let row = 0; row < 8; row++) {
-      const tr = document.createElement("tr");
-      for (let col = 0; col < 8; col++) {
-        const td = document.createElement("td");
-        const isWhite = (row + col) % 2 === 0;
-        td.className = isWhite ? "white" : "black";
-
-        const piece = grid[row][col];
-        if (piece) {
-          td.textContent = symbols[piece.type];
-          td.classList.add(piece.color === "White" ? "white-piece" : "black-piece");
+      const board = document.getElementById("chessboard");
+      board.innerHTML = "";
+  
+      const grid = Array.from({ length: size }, () => Array(size).fill(null));
+      const cols = Array.from({ length: size }, (_, i) => String.fromCharCode(97 + i));
+  
+      pieces.forEach(piece => {
+        const x = piece.col.charCodeAt(0) - "a".charCodeAt(0);
+        const y = size - piece.row;
+        if (x >= 0 && x < size && y >= 0 && y < size) {
+          grid[y][x] = piece;
         }
-
-        tr.appendChild(td);
+      });
+  
+      const topRow = document.createElement("tr");
+      const emptyTopLeft = document.createElement("td");
+      emptyTopLeft.className = "label-col";
+      topRow.appendChild(emptyTopLeft);
+  
+      for (let c = 0; c < size; c++) {
+        const td = document.createElement("td");
+        td.className = "label";
+        td.textContent = cols[c];
+        topRow.appendChild(td);
       }
-      board.appendChild(tr);
+  
+      board.appendChild(topRow);
+  
+      for (let row = 0; row < size; row++) {
+        const tr = document.createElement("tr");
+  
+        const leftLabel = document.createElement("td");
+        leftLabel.className = "label";
+        leftLabel.textContent = size - row;
+        tr.appendChild(leftLabel);
+  
+        for (let col = 0; col < size; col++) {
+          const td = document.createElement("td");
+          const isWhite = (row + col) % 2 === 0;
+          td.className = isWhite ? "white" : "black";
+  
+          const piece = grid[row][col];
+          if (piece) {
+            td.textContent = symbols[piece.type];
+            td.classList.add(piece.color === "White" ? "white-piece" : "black-piece");
+          }
+  
+          tr.appendChild(td);
+        }
+  
+        const rightLabel = document.createElement("td");
+        rightLabel.className = "label";
+        rightLabel.textContent = size - row;
+        tr.appendChild(rightLabel);
+  
+        board.appendChild(tr);
+      }
+  
+      const bottomRow = document.createElement("tr");
+      const emptyBottomLeft = document.createElement("td");
+      emptyBottomLeft.className = "label-col";
+      bottomRow.appendChild(emptyBottomLeft);
+  
+      for (let c = 0; c < size; c++) {
+        const td = document.createElement("td");
+        td.className = "label";
+        td.textContent = cols[c];
+        bottomRow.appendChild(td);
+      }
+      board.appendChild(bottomRow);
     }
-  }
-
-  renderBoard(pieces);
+  
+    renderBoard(pieces);
 </script>
 
 </body>
