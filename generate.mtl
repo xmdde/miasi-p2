@@ -55,8 +55,8 @@ class [c.name/](Piece):
 class Piece:
     def __init__(self, color, col, row):
         self.color = color
-        self.col = col  # e.g. 'e'
-        self.row = row  # e.g. 2
+        self.col = col
+        self.row = row
 
     def symbol(self):
         raise NotImplementedError("Subclasses must implement this method.")
@@ -71,7 +71,7 @@ class Piece:
 [template private generateGameBoardSetup(board : Model)]
 class GameBoard(Board):
     def __init__(self):
-        super().__init__(8)
+        super().__init__([board.packagedElement->filter(InstanceSpecification)->select(i | i.classifier->exists(c | i.classifier->asSequence()->first().name = 'Board')).slot->select(s | s.definingFeature.name = 'size')->asSequence()->first().value->first().eGet('value')/])
         self.move_history = ['['/][']'/]
         self.setup()
 
@@ -81,6 +81,11 @@ class GameBoard(Board):
   )]
         self.add_piece([p.classifier->asSequence()->first().name/]("[p.slot->select(s | s.definingFeature.name = 'color')->asSequence()->first().value->first().oclAsType(LiteralString).value/]", '[p.slot->select(s | s.definingFeature.name = 'col')->asSequence()->first().value->first().oclAsType(LiteralString).value/]', [p.slot->select(s | s.definingFeature.name = 'row')->asSequence()->first().value->first().oclAsType(LiteralInteger).value/]))
 [/for]
+
+if __name__ == "__main__":
+    board = GameBoard()
+    board.setup()
+    board.print_board()
 [/template]
 
 [template private generateBaseBoard(board : Model)]
@@ -112,5 +117,4 @@ class Board:
             print(row_str + f" {row_idx + 1}")
         print(divider)
         print(top_row)
-
 [/template]
