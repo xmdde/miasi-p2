@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chessboard</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    td {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 38px;
+      font-family: monospace;
+      border: 1px solid #333;
+    }
+    .white { background-color: #f0d9b5; }
+    .black { background-color: #b58863; }
+    .white-piece { color: white; }
+    .black-piece { color: black; }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Chess Board</h2>
+<div style="display: flex; justify-content: center;">
+  <table id="chessboard"></table>
+</div>
+
+<script>
+  const symbols = {
+    "Pawn": "♟",
+    "Rook": "♜",
+    "Knight": "♞",
+    "Bishop": "♝",
+    "Queen": "♛",
+    "King": "♚"
+  };
+
+  const pieces = [
+    { color: "Black", type: "Rook", col: "a", row: 8 },
+    { color: "Black", type: "Knight", col: "b", row: 8 },
+    { color: "Black", type: "Bishop", col: "c", row: 8 },
+    { color: "Black", type: "Queen", col: "d", row: 8 },
+    { color: "Black", type: "King", col: "e", row: 8 },
+    { color: "Black", type: "Bishop", col: "f", row: 8 },
+    { color: "Black", type: "Knight", col: "g", row: 8 },
+    { color: "Black", type: "Rook", col: "h", row: 8 },
+    { color: "Black", type: "Pawn", col: "a", row: 7 },
+    { color: "Black", type: "Pawn", col: "b", row: 7 },
+    { color: "Black", type: "Pawn", col: "c", row: 7 },
+    { color: "Black", type: "Pawn", col: "d", row: 7 },
+    { color: "Black", type: "Pawn", col: "e", row: 7 },
+    { color: "Black", type: "Pawn", col: "f", row: 7 },
+    { color: "Black", type: "Pawn", col: "g", row: 7 },
+    { color: "Black", type: "Pawn", col: "h", row: 7 },
+
+    { color: "White", type: "Pawn", col: "a", row: 2 },
+    { color: "White", type: "Pawn", col: "b", row: 2 },
+    { color: "White", type: "Pawn", col: "c", row: 2 },
+    { color: "White", type: "Pawn", col: "d", row: 2 },
+    { color: "White", type: "Pawn", col: "e", row: 2 },
+    { color: "White", type: "Pawn", col: "f", row: 2 },
+    { color: "White", type: "Pawn", col: "g", row: 2 },
+    { color: "White", type: "Pawn", col: "h", row: 2 },
+    { color: "White", type: "Rook", col: "a", row: 1 },
+    { color: "White", type: "Knight", col: "b", row: 1 },
+    { color: "White", type: "Bishop", col: "c", row: 1 },
+    { color: "White", type: "Queen", col: "d", row: 1 },
+    { color: "White", type: "King", col: "e", row: 1 },
+    { color: "White", type: "Bishop", col: "f", row: 1 },
+    { color: "White", type: "Knight", col: "g", row: 1 },
+    { color: "White", type: "Rook", col: "h", row: 1 }
+  ];
+
+  function renderBoard(pieces) {
+    const board = document.getElementById("chessboard");
+    board.innerHTML = "";
+
+    const grid = Array.from({ length: 8 }, () => Array(8).fill(null));
+
+    pieces.forEach(piece => {
+      const x = piece.col.charCodeAt(0) - "a".charCodeAt(0);
+      const y = 8 - piece.row;
+      grid[y][x] = piece;
+    });
+
+    for (let row = 0; row < 8; row++) {
+      const tr = document.createElement("tr");
+      for (let col = 0; col < 8; col++) {
+        const td = document.createElement("td");
+        const isWhite = (row + col) % 2 === 0;
+        td.className = isWhite ? "white" : "black";
+
+        const piece = grid[row][col];
+        if (piece) {
+          td.textContent = symbols[piece.type];
+          td.classList.add(piece.color === "White" ? "white-piece" : "black-piece");
+        }
+
+        tr.appendChild(td);
+      }
+      board.appendChild(tr);
+    }
+  }
+
+  renderBoard(pieces);
+</script>
+
+</body>
+</html>

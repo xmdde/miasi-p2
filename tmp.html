@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Szachownica</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    td {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 38px;
+      font-family: monospace;
+      border: 1px solid #333;
+      user-select: none;
+    }
+    .white { background-color: #f0d9b5; }
+    .black { background-color: #b58863; }
+    .white-piece { color: white; }
+    .black-piece { color: black; }
+    .label {
+      background: none;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+      color: black;
+    }
+    .label-row td, .label-col {
+      border: none;
+      background: none;
+    }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Szachownica z etykietami</h2>
+<div style="display: flex; justify-content: center;">
+  <table id="chessboard"></table>
+</div>
+
+<script>
+  const size = 8;
+
+  const blackSymbols = {
+    "Pawn": "♟", "Rook": "♜", "Knight": "♞",
+    "Bishop": "♝", "Queen": "♛", "King": "♚"
+  };
+
+  const pieces = [
+    { color: "White", type: "King", col: "a", row: 1 },
+    { color: "Black", type: "King", col: "e", row: 8 }
+  ];
+
+  function renderBoard(pieces) {
+    const board = document.getElementById("chessboard");
+    board.innerHTML = "";
+
+    const grid = Array.from({ length: size }, () => Array(size).fill(null));
+    const cols = Array.from({ length: size }, (_, i) => String.fromCharCode(97 + i));
+
+    pieces.forEach(piece => {
+      const x = piece.col.charCodeAt(0) - "a".charCodeAt(0);
+      const y = size - piece.row;
+      if (x >= 0 && x < size && y >= 0 && y < size) {
+        grid[y][x] = piece;
+      }
+    });
+
+    const topRow = document.createElement("tr");
+    const emptyTopLeft = document.createElement("td");
+    emptyTopLeft.className = "label-col";
+    topRow.appendChild(emptyTopLeft);
+
+    for (let c = 0; c < size; c++) {
+      const td = document.createElement("td");
+      td.className = "label";
+      td.textContent = cols[c];
+      topRow.appendChild(td);
+    }
+
+    board.appendChild(topRow);
+
+    for (let row = 0; row < size; row++) {
+      const tr = document.createElement("tr");
+
+      const leftLabel = document.createElement("td");
+      leftLabel.className = "label";
+      leftLabel.textContent = size - row;
+      tr.appendChild(leftLabel);
+
+      for (let col = 0; col < size; col++) {
+        const td = document.createElement("td");
+        const isWhite = (row + col) % 2 === 0;
+        td.className = isWhite ? "white" : "black";
+
+        const piece = grid[row][col];
+        if (piece) {
+          td.textContent = blackSymbols[piece.type];
+          td.classList.add(piece.color === "White" ? "white-piece" : "black-piece");
+        }
+
+        tr.appendChild(td);
+      }
+
+      const rightLabel = document.createElement("td");
+      rightLabel.className = "label";
+      rightLabel.textContent = size - row;
+      tr.appendChild(rightLabel);
+
+      board.appendChild(tr);
+    }
+
+    const bottomRow = document.createElement("tr");
+    const emptyBottomLeft = document.createElement("td");
+    emptyBottomLeft.className = "label-col";
+    bottomRow.appendChild(emptyBottomLeft);
+
+    for (let c = 0; c < size; c++) {
+      const td = document.createElement("td");
+      td.className = "label";
+      td.textContent = cols[c];
+      bottomRow.appendChild(td);
+    }
+    board.appendChild(bottomRow);
+  }
+
+  renderBoard(pieces);
+</script>
+
+</body>
+</html>
