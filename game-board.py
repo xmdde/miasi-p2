@@ -14,10 +14,6 @@ class Piece:
         return x, y
 
 
-class Pawn(Piece):
-    def symbol(self):
-        return 'P' if self.color == 'White' else 'p'
-
 class Queen(Piece):
     def symbol(self):
         return 'Q' if self.color == 'White' else 'q'
@@ -25,6 +21,18 @@ class Queen(Piece):
 class King(Piece):
     def symbol(self):
         return 'K' if self.color == 'White' else 'k'
+
+class Bishop(Piece):
+    def symbol(self):
+        return 'B' if self.color == 'White' else 'b'
+
+class Rook(Piece):
+    def symbol(self):
+        return 'R' if self.color == 'White' else 'r'
+
+class Pawn(Piece):
+    def symbol(self):
+        return 'P' if self.color == 'White' else 'p'
 
 
 class Board:
@@ -63,17 +71,28 @@ class GameBoard(Board):
         self.setup()
 
     def setup(self):
+        self.add_piece(Pawn("White", 'g', 2))
+        self.add_piece(Pawn("Black", 'd', 7))
+        self.add_piece(Pawn("White", 'd', 2))
+        self.add_piece(King("Black", 'e', 8))
+        self.add_piece(Rook("White", 'a', 1))
+        self.add_piece(Pawn("Black", 'a', 7))
+        self.add_piece(Pawn("Black", 'e', 7))
+        self.add_piece(Pawn("White", 'c', 2))
+        self.add_piece(Rook("Black", 'h', 8))
+        self.add_piece(Pawn("White", 'f', 2))
+        self.add_piece(Pawn("Black", 'c', 7))
+        self.add_piece(Pawn("White", 'e', 2))
+        self.add_piece(Pawn("Black", 'b', 7))
+        self.add_piece(Pawn("White", 'a', 2))
+        self.add_piece(Pawn("White", 'h', 2))
         self.add_piece(Queen("Black", 'd', 8))
         self.add_piece(King("White", 'e', 1))
-        self.add_piece(King("Black", 'e', 8))
-        self.add_piece(Pawn("Black", 'c', 7))
-        self.add_piece(Pawn("White", 'c', 2))
-        self.add_piece(Pawn("Black", 'e', 7))
-        self.add_piece(Pawn("Black", 'a', 7))
-        self.add_piece(Pawn("Black", 'b', 7))
+        self.add_piece(Rook("Black", 'a', 8))
+        self.add_piece(Rook("White", 'h', 1))
         self.add_piece(Queen("White", 'd', 1))
-        self.add_piece(Pawn("Black", 'd', 7))
-        self.add_piece(Pawn("White", 'a', 2))
+        self.add_piece(Bishop("Black", 'c', 8))
+        self.add_piece(Bishop("Black", 'f', 8))
         self.add_piece(Pawn("White", 'b', 2))
 
 if __name__ == "__main__":
