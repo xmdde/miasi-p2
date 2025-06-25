@@ -14,14 +14,6 @@ class Piece:
         return x, y
 
 
-class Queen(Piece):
-    def symbol(self):
-        return 'Q' if self.color == 'White' else 'q'
-
-class Bishop(Piece):
-    def symbol(self):
-        return 'B' if self.color == 'White' else 'b'
-
 class Rook(Piece):
     def symbol(self):
         return 'R' if self.color == 'White' else 'r'
@@ -30,9 +22,17 @@ class Pawn(Piece):
     def symbol(self):
         return 'P' if self.color == 'White' else 'p'
 
+class Bishop(Piece):
+    def symbol(self):
+        return 'B' if self.color == 'White' else 'b'
+
 class Knight(Piece):
     def symbol(self):
         return 'N' if self.color == 'White' else 'n'
+
+class Queen(Piece):
+    def symbol(self):
+        return 'Q' if self.color == 'White' else 'q'
 
 class King(Piece):
     def symbol(self):
